@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" class="dark">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>US Data Center Grid & Water Intelligence Atlas (2026–2030)</title>
+  <script>document.documentElement.classList.add("atlas-i18n-pending");setTimeout(()=>document.documentElement.classList.remove("atlas-i18n-pending"),5000);</script>
+  <style>.atlas-i18n-pending body{visibility:hidden}</style>
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +39,9 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="./translations.js"></script>
+  <script src="./locale.js"></script>
+  <script src="./severity.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 
@@ -526,6 +531,7 @@
                 </button>
               </div>
 
+              <div id="projectImpactSummary" class="mb-3"></div>
               <p id="detailNotes" class="text-xs text-slate-300 bg-slate-900/80 rounded-xl p-2.5 border border-slate-800 mb-3 leading-relaxed"></p>
 
               <!-- 4 Key Site Metrics -->
@@ -2998,7 +3004,7 @@
         const isSel = p.id === selectedProjectId;
         return `
           <tr data-project-row="${p.id}" class="project-row cursor-pointer transition ${isSel ? 'bg-cyan-500/15 border-l-2 border-l-cyan-400' : 'hover:bg-slate-900/90'}">
-            <td class="py-2 px-2.5 font-semibold text-white">${p.name}</td>
+            <td class="py-2 px-2.5 font-semibold text-white">${p.name}${AtlasSeverity.render(p, eng, DEMOCRATIC_POLITICIANS_DATA.find(d => d.stateCode === p.state))}</td>
             <td class="py-2 px-2.5 text-slate-300">${p.operatorDisplay}</td>
             <td class="py-2 px-2.5 text-slate-300">${p.cityFull || (p.city + ', ' + p.state)}</td>
             <td class="py-2 px-2.5 text-right font-mono font-bold text-amber-400">${p.mw.toLocaleString()} MW</td>
@@ -3060,6 +3066,7 @@
       document.getElementById("detailProjectName").textContent = p.name;
       document.getElementById("detailLocationSub").textContent = `${p.cityFull || (p.city + ', ' + st.name)} · ${st.aquifer}`;
       document.getElementById("detailNotes").textContent = p.notes;
+      document.getElementById("projectImpactSummary").innerHTML = AtlasSeverity.render(p, eng, DEMOCRATIC_POLITICIANS_DATA.find(d => d.stateCode === p.state));
 
       document.getElementById("detailMW").textContent = `${p.mw.toLocaleString()} MW (${(p.mw / 1000).toFixed(2)} GW)`;
       document.getElementById("detailAnnualTWh").textContent = `연간 약 ${eng.annualTWh} TWh 소비 (PUE ${eng.pue})`;
@@ -3139,7 +3146,7 @@
       if (polBoxEl && statePol) {
         polBoxEl.innerHTML = `
           <div class="font-bold text-white">${statePol.name} <span class="text-[10px] font-mono text-indigo-300">(${statePol.stanceBadge})</span></div>
-          <div class="italic text-slate-300 my-1">"${statePol.quote.slice(0, 115)}..."</div>
+          <div class="italic text-slate-300 my-1">"${(window.atlasTranslate ? window.atlasTranslate(statePol.quote) : statePol.quote).slice(0, 115)}..."</div>
           <div class="text-indigo-200 text-[10px]">${statePol.prediction} · <a href="${statePol.sourceUrl}" target="_blank" rel="noopener noreferrer" class="text-cyan-300 underline">기사원문 ↗</a></div>
         `;
       }
