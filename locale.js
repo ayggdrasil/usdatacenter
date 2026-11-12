@@ -26,6 +26,11 @@
   }
   window.atlasLanguage = language;
   window.atlasTranslate = translate;
+  const mapStatuses = {
+    ko: {'Under Construction':'건설 중', Planned:'계획', Proposed:'제안·심사 중', Operational:'가동 중'},
+    ja: {'Under Construction':'建設中', Planned:'計画', Proposed:'提案・審査中', Operational:'稼働中'}
+  };
+  window.atlasMapStatus = value => mapStatuses[language]?.[value] || value;
   document.documentElement.lang = language;
   try { localStorage.setItem('atlas-language', language); } catch (_) {}
 
@@ -73,6 +78,7 @@
       }
     }
   }
+  window.atlasLocalizeElement = translateDOM;
   function apply() {
     observer?.disconnect();
     if (typeof document === 'undefined' || !document.body) return;

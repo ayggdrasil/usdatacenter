@@ -2725,10 +2725,11 @@
     let selectedProjectId = PROJECTS_DATA[0].id;
     let useVectorFallback = false;
 
+    const mapLanguage = ['en', 'ko', 'ja'].includes(window.atlasLanguage) ? window.atlasLanguage : 'en';
     const GOOGLE_TILE_URLS = {
-      hybrid: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
-      roadmap: "https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-      terrain: "https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+      hybrid: `https://mt1.google.com/vt?lyrs=y&x={x}&y={y}&z={z}&hl=${mapLanguage}`,
+      roadmap: `https://mt1.google.com/vt?lyrs=m&x={x}&y={y}&z={z}&hl=${mapLanguage}`,
+      terrain: `https://mt1.google.com/vt?lyrs=p&x={x}&y={y}&z={z}&hl=${mapLanguage}`
     };
 
     function latLngToSvgXY(lat, lng) {
@@ -2884,6 +2885,7 @@
             <div class="text-cyan-300 font-mono">${p.mw.toLocaleString()} MW · 직접용수 ${eng.directMGD} MGD</div>
             <div class="text-slate-400">${p.city}, ${p.state} (${eng.state.iso})</div>
           `;
+          window.atlasLocalizeElement?.(tooltip);
           tooltip.classList.remove("hidden");
         });
         node.addEventListener("mousemove", (e) => {
@@ -2964,7 +2966,7 @@
           const popupHtml = `
             <div class="p-1 min-w-[230px] text-xs">
               <div class="flex items-center justify-between gap-2 mb-1">
-                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300">${p.status}</span>
+                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300">${window.atlasMapStatus(p.status)}</span>
                 <span class="font-mono text-[10px] text-slate-400">${eng.state.iso} Grid</span>
               </div>
               <div class="font-bold text-sm text-white mb-0.5">${p.name}</div>
@@ -2986,7 +2988,10 @@
             </div>
           `;
 
-          marker.bindPopup(popupHtml);
+          const popupContent = document.createElement('div');
+          popupContent.innerHTML = popupHtml;
+          window.atlasLocalizeElement?.(popupContent);
+          marker.bindPopup(popupContent);
           marker.on("click", () => {
             selectProject(p.id, false);
           });
