@@ -30,3 +30,6 @@ GitHub Pages publishes the main branch. The xpacex.trade host mounts the same st
 Each of the 26 projects has a one-line power, direct-water and policy-pressure assessment in the project list and selected-project panel. The expandable methodology explains the screening thresholds. These are scenario labels based on the supplied dataset, not calibrated forecasts or evidence of enacted restrictions. Missing state-specific policy entries stay unknown. Three projects with mismatched original state proxies (Nevada, Tennessee/Mississippi and North Carolina) are explicitly unassessed rather than assigned another state's score.
 
 `severity.js` contains the deterministic rules and hand-written explanations in all three languages. The underlying engineering calculations are preserved.
+
+
+Analysis panels support wrapping in English,Korean,andJapanese. The investment value chain uses responsive stage cards; political map labels wrap inside their badges.

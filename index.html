@@ -55,6 +55,28 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
     }
+
+    /* Analysis content grows with translations and long numeric results. */
+    .glass-card, .tab-view { min-width: 0; overflow-wrap: anywhere; }
+    .tab-view :where(.flex, .grid) > * { min-width: 0; }
+    .tab-view :where(.flex:not(.flex-col)) { flex-wrap: wrap; }
+    .tab-view :where(select, input, button) { max-width: 100%; }
+    .tab-view select { min-width: 0; }
+    .tab-view :where(h2, h3, h4, p, span, a, label) { overflow-wrap: anywhere; }
+    .tab-view .font-mono { overflow-wrap: anywhere; }
+    .value-chain-stages { position: relative; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 24px; padding: 16px; background: #070c18; border: 1px solid #1e293b; border-radius: 12px; }
+    .value-chain-stage { position: relative; min-width: 0; padding: 16px; border: 1px solid var(--stage-color); border-radius: 12px; background: #0f172a; overflow-wrap: anywhere; }
+    .value-chain-stage p, .value-chain-stage h4 { margin: 0; }
+    .stage-kicker { color: var(--stage-color); font: 700 11px/1.6 'JetBrains Mono',monospace; }
+    .stage-title { margin-top: 8px !important; font: 700 13px/1.6 Inter,sans-serif; color: #fff; }
+    .stage-copy { margin-top: 8px !important; font-size: 11px; line-height: 1.7; color: #94a3b8; }
+    .stage-metric { margin-top: 12px !important; color: var(--stage-color); font: 700 12px/1.7 'JetBrains Mono',monospace; }
+    .stage-connector { position: absolute; top: 50%; transform: translate(-50%,-50%); color: var(--stage-color); font-size: 20px; }
+    #flowStream1 { left: calc(25% + 2px); } #flowStream2 { left: 50%; } #flowStream3 { left: calc(75% - 2px); }
+    .pol-map-label { width: 100%; height: 100%; padding: 4px; border: 1px solid #334155; border-radius: 4px; background: #070b14; color: #e2e8f0; text-align: center; font: 600 8.5px/1.5 Inter,sans-serif; overflow-wrap: anywhere; }
+    @media (max-width: 1023px) { .value-chain-stages { grid-template-columns: repeat(2,minmax(0,1fr)); } .stage-connector { display: none; } }
+    @media (max-width: 639px) { .value-chain-stages { grid-template-columns: minmax(0,1fr); gap: 20px; padding: 12px; } .stage-connector { display: none; } .tab-view :where(.flex.justify-between) { gap: 8px; } }
+
     .hidden { display: none !important; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
@@ -1357,48 +1379,12 @@
           </h3>
           <span class="text-[11px] font-mono text-cyan-300">아래 슬라이더 조절 시 병목 속도와 유효 칩 수요가 실시간 연동됩니다</span>
         </div>
-        <div class="w-full overflow-x-auto bg-[#070c18] rounded-xl border border-slate-800/90 p-2">
-          <svg viewBox="0 0 980 155" class="w-full h-36 min-w-[760px]" preserveAspectRatio="xMidYMid meet">
-            <line id="flowStream1" x1="210" y1="78" x2="295" y2="78" stroke="#f59e0b" stroke-width="3.5" class="anim-flow-line" />
-            <line id="flowStream2" x1="485" y1="78" x2="565" y2="78" stroke="#38bdf8" stroke-width="3.5" class="anim-flow-line" />
-            <line id="flowStream3" x1="755" y1="78" x2="825" y2="78" stroke="#34d399" stroke-width="3.5" class="anim-flow-fast" />
-
-            <g transform="translate(15, 22)">
-              <rect width="195" height="110" rx="12" fill="#0f172a" stroke="#f59e0b" stroke-width="1.8"/>
-              <text x="14" y="24" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">STAGE 1 · 전력망 &amp; 인허가</text>
-              <text x="14" y="44" fill="#ffffff" font-family="Inter, sans-serif" font-size="12" font-weight="700">계통 접속 대기 &amp; 모라토리엄</text>
-              <text x="14" y="64" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">• PJM/ERCOT 대기: 3~7년</text>
-              <text x="14" y="80" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">• 2026 정시 완공률: ~50%</text>
-              <text id="svgStage1Metric" x="14" y="98" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700">유효 수전: 14.0 GW/년</text>
-            </g>
-
-            <g transform="translate(295, 22)">
-              <rect width="190" height="110" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
-              <text x="14" y="24" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">STAGE 2 · 중전기기 &amp; 수냉 설비</text>
-              <text x="14" y="44" fill="#ffffff" font-family="Inter, sans-serif" font-size="12" font-weight="700">변압기(160주) &amp; D2C CDU</text>
-              <text x="14" y="64" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">• 전력·건물 인프라: $15B / GW</text>
-              <text x="14" y="80" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">• 액체냉각·배전 피트아웃: $5B / GW</text>
-              <text id="svgStage2Metric" x="14" y="98" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700">인프라 CAPEX: $280B</text>
-            </g>
-
-            <g transform="translate(565, 22)">
-              <rect width="190" height="110" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="1.8"/>
-              <text x="14" y="24" fill="#c084fc" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">STAGE 3 · 파운드리 &amp; HBM</text>
-              <text x="14" y="44" fill="#ffffff" font-family="Inter, sans-serif" font-size="12" font-weight="700">TSMC CoWoS &amp; HBM3e/HBM4</text>
-              <text x="14" y="64" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">• 3nm 로직: 5.5만 장 / GW</text>
-              <text x="14" y="80" fill="#94a3b8" font-family="Inter, sans-serif" font-size="10">• HBM·DRAM: 17만 장 / GW</text>
-              <text id="svgStage3Metric" x="14" y="98" fill="#c084fc" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700">필요 HBM 웨이퍼: 238만장</text>
-            </g>
-
-            <g transform="translate(825, 22)">
-              <rect width="142" height="110" rx="12" fill="#0f172a" stroke="#34d399" stroke-width="1.8"/>
-              <text x="12" y="24" fill="#34d399" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">STAGE 4 · 칩 매출 전환</text>
-              <text x="12" y="44" fill="#ffffff" font-family="Inter, sans-serif" font-size="12" font-weight="700">실리콘 CAPEX ($30B/GW)</text>
-              <text id="svgStage4Active" x="12" y="68" fill="#34d399" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700">가동: $420B</text>
-              <text id="svgStage4Stranded" x="12" y="90" fill="#f43f5e" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700">지연/유휴: $180B</text>
-            </g>
-          </svg>
-        </div>
+        <div id="valueChainStages" class="value-chain-stages">
+          <article class="value-chain-stage" style="--stage-color:#fbbf24"><p class="stage-kicker">STAGE 1 · 전력망 &amp; 인허가</p><h4 class="stage-title">계통 접속 대기 &amp; 모라토리엄</h4><p class="stage-copy">• PJM/ERCOT 대기: 3~7년</p><p class="stage-copy">• 2026 정시 완공률: ~50%</p><p id="svgStage1Metric" class="stage-metric">유효 수전: 14.0 GW/년</p></article>
+          <article class="value-chain-stage" style="--stage-color:#38bdf8"><p class="stage-kicker">STAGE 2 · 중전기기 &amp; 수냉 설비</p><h4 class="stage-title">변압기(160주) &amp; D2C CDU</h4><p class="stage-copy">• 전력·건물 인프라: $15B / GW</p><p class="stage-copy">• 액체냉각·배전 피트아웃: $5B / GW</p><p id="svgStage2Metric" class="stage-metric">인프라 CAPEX: $280B</p></article>
+          <article class="value-chain-stage" style="--stage-color:#c084fc"><p class="stage-kicker">STAGE 3 · 파운드리 &amp; HBM</p><h4 class="stage-title">TSMC CoWoS &amp; HBM3e/HBM4</h4><p class="stage-copy">• 3nm 로직: 5.5만 장 / GW</p><p class="stage-copy">• HBM·DRAM: 17만 장 / GW</p><p id="svgStage3Metric" class="stage-metric">필요 HBM 웨이퍼: 238만장</p></article>
+          <article class="value-chain-stage" style="--stage-color:#34d399"><p class="stage-kicker">STAGE 4 · 칩 매출 전환</p><h4 class="stage-title">실리콘 CAPEX ($30B/GW)</h4><p id="svgStage4Active" class="stage-metric">가동: $420B</p><p id="svgStage4Stranded" class="stage-metric">지연/유휴: $180B</p></article>
+        <span id="flowStream1" class="stage-connector" aria-hidden="true">→</span><span id="flowStream2" class="stage-connector" aria-hidden="true">→</span><span id="flowStream3" class="stage-connector" aria-hidden="true">→</span></div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -3748,8 +3734,7 @@
               <circle r="20" fill="rgba(15, 23, 42, 0.92)" stroke="${chCol.hex}" stroke-width="${isSelectedState ? '3' : '2'}" />
               <text y="-2" text-anchor="middle" fill="#ffffff" font-family="JetBrains Mono, monospace" font-size="11" font-weight="800">${pol.stateCode}</text>
               <text y="9" text-anchor="middle" fill="${chCol.hex}" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="700">${pol.chamberType}</text>
-              <rect x="-46" y="22" width="92" height="15" rx="4" fill="rgba(7, 11, 20, 0.88)" stroke="rgba(148,163,184,0.25)" stroke-width="1"/>
-              <text y="32" text-anchor="middle" fill="#e2e8f0" font-family="Inter, sans-serif" font-size="8.5" font-weight="600">${pol.shortLabel} (${stMeta.plannedPipelineGW}GW)</text>
+              <foreignObject x="-72" y="22" width="144" height="44"><div xmlns="http://www.w3.org/1999/xhtml" class="pol-map-label">${pol.shortLabel} (${stMeta.plannedPipelineGW}GW)</div></foreignObject>
             </g>
           `;
         }).join("");
